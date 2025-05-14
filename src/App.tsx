@@ -62,18 +62,22 @@ function Content({ profile }: { profile: any }) {
 
       <Authenticated>
         {profile === null ? (
-          <CreateProfile />
+          <div className="h-[calc(100vh-64px)] flex items-center justify-center bg-ss-dblue overflow-y-auto">
+            <CreateProfile />
+          </div>
         ) : profile === undefined ? (
           <div>Loading...</div>
         ) : !profile.isActive ? (
-          <div className="text-center">
-            <h1 className="text-2xl font-bold mb-4">
-              Account Pending Approval
-            </h1>
-            <p className="text-gray-600">
-              Your account is currently inactive. Please wait for a staff member
-              to approve your account.
-            </p>
+          <div className="h-[calc(100vh-64px)] flex items-center justify-center bg-ss-dblue overflow-y-auto">
+            <div className="text-center">
+              <h1 className="text-2xl font-bold mb-4 text-gray-100">
+                Account Pending Approval
+              </h1>
+              <p className="text-gray-400">
+                Your account is currently inactive. Please wait for a staff
+                member to approve your account.
+              </p>
+            </div>
           </div>
         ) : profile.role === "staff" ? (
           <StaffContent profile={profile} />
