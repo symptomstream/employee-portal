@@ -5,12 +5,17 @@ import { ConvexReactClient } from "convex/react";
 import "./index.css";
 import App from "./App";
 
-const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL as string);
+const convex = new ConvexReactClient(
+  import.meta.env.VITE_CONVEX_URL as string,
+  {
+    verbose: true,
+  }
+);
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ConvexAuthProvider client={convex}>
       <App />
     </ConvexAuthProvider>
-  </StrictMode>,
+  </StrictMode>
 );
