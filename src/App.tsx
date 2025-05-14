@@ -62,6 +62,8 @@ function Content({ profile }: { profile: any }) {
       <Authenticated>
         {profile === null ? (
           <CreateProfile />
+        ) : profile === undefined ? (
+          <div>Loading...</div>
         ) : !profile.isActive ? (
           <div className="text-center">
             <h1 className="text-2xl font-bold mb-4">
