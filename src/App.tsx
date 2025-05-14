@@ -89,6 +89,20 @@ function Content({ profile }: { profile: any }) {
 function App() {
   const profile = useQuery(api.users.getProfile);
 
+  useEffect(() => {
+    if (profile !== undefined) {
+      if (profile) {
+        console.log("✅ User is authenticated:", profile);
+        toast.success("Authenticated as " + profile.name);
+      } else {
+        console.log("🟡 Authenticated, but no profile exists.");
+        toast.info("Please create your profile.");
+      }
+    } else {
+      console.log("⏳ Auth state loading...");
+    }
+  }, [profile]);
+
   return (
     <div className="min-h-screen flex flex-col">
       <header className="sticky top-0 z-10 bg-ss-blue p-4 flex justify-between items-center ">
