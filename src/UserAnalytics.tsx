@@ -39,6 +39,8 @@ export function UserAnalytics({ user }: { user: any }) {
         data: labels.map((date) => dailyHours[date] ?? 0),
         borderColor: "rgb(75, 192, 192)",
         tension: 0.1,
+        backgroundColor: "rgba(75, 192, 192, 0.15)",
+        fill: true,
         pointBackgroundColor: "rgb(75, 192, 192)",
         pointRadius: 6,
         datalabels: {
@@ -111,6 +113,10 @@ export function UserAnalytics({ user }: { user: any }) {
               options={{
                 responsive: true,
                 maintainAspectRatio: false,
+                animation: {
+                  duration: 800,
+                  easing: "easeOutQuart",
+                },
                 plugins: {
                   legend: {
                     display: false,
@@ -137,18 +143,24 @@ export function UserAnalytics({ user }: { user: any }) {
                 scales: {
                   y: {
                     beginAtZero: true,
+                    suggestedMax: 8,
+                    ticks: {
+                      stepSize: 1,
+                      font: { size: 12 },
+                    },
                     title: {
                       display: true,
                       text: "Hours",
-                      font: {
-                        weight: "bold",
-                      },
+                      font: { weight: "bold", size: 14 },
                     },
                     grid: {
                       color: "rgba(0, 0, 0, 0.05)",
                     },
                   },
                   x: {
+                    ticks: {
+                      font: { size: 12 },
+                    },
                     grid: {
                       display: false,
                     },
@@ -163,6 +175,7 @@ export function UserAnalytics({ user }: { user: any }) {
                     hoverRadius: 6,
                     backgroundColor: "white",
                     borderWidth: 2,
+                    pointStyle: "circle",
                   },
                 },
               }}
