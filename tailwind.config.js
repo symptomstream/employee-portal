@@ -74,6 +74,7 @@ module.exports = {
       },
       animation: {
         shine: "shine var(--duration) infinite linear",
+        pulseDot: "pulseDot 1.5s infinite",
       },
       keyframes: {
         shine: {
@@ -86,6 +87,10 @@ module.exports = {
           "100%": {
             "background-position": "0% 0%",
           },
+        },
+        pulseDot: {
+          "0%, 100%": { transform: "scale(1)", opacity: "1" },
+          "50%": { transform: "scale(1.6)", opacity: "0.5" },
         },
       },
     },

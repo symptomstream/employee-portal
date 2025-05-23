@@ -29,6 +29,10 @@ export function UserAnalytics({ user }: { user: any }) {
     sessionCounts[date] = (sessionCounts[date] || 0) + 1;
   });
 
+  const hasActiveSession = workSessions.some(
+    (session) => session.checkOut === undefined
+  );
+
   const labels = Object.keys(dailyHours);
 
   const chartData = {
@@ -66,10 +70,15 @@ export function UserAnalytics({ user }: { user: any }) {
   return (
     <div className="bg-ss-light shadow rounded-[6px] p-6">
       <div className="flex flex-col gap-4">
-        <div className="w-full text-left">
+        <div className="w-full flex items-center justify-between">
           <h3 className="text-xl font-semibold">{user.name}</h3>
+          {hasActiveSession && (
+            <span title="Active Session" className="relative flex h-3 w-3">
+              <span className="animate-pulseDot absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+              <span className="relative inline-flex h-3 w-3 rounded-full bg-green-500"></span>
+            </span>
+          )}
         </div>
-
         <div className="flex justify-between items-center">
           <div className="flex gap-8">
             <div className="text-right">
