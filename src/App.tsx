@@ -13,6 +13,7 @@ import { Id } from "../convex/_generated/dataModel";
 import { useSwipeable } from "react-swipeable";
 import { UserManagement } from "./UserManagement";
 import { Analytics } from "./Analytics";
+import ChartDataLabels from "chartjs-plugin-datalabels";
 
 import {
   Chart as ChartJS,
@@ -23,7 +24,6 @@ import {
   Title,
   Tooltip,
   Legend,
-  BarElement,
 } from "chart.js";
 
 ChartJS.register(
@@ -31,10 +31,10 @@ ChartJS.register(
   LinearScale,
   PointElement,
   LineElement,
-  BarElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  ChartDataLabels
 );
 
 function Content({ profile }: { profile: any }) {

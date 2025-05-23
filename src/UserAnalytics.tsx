@@ -23,18 +23,37 @@ export function UserAnalytics({ user }: { user: any }) {
       (dailyHours[date] || 0) + session.duration / 1000 / 60 / 60;
   });
 
+  const sessionCounts: { [date: string]: number } = {};
+  workSessions.forEach((session) => {
+    const date = format(session.checkIn, "MM/dd");
+    sessionCounts[date] = (sessionCounts[date] || 0) + 1;
+  });
+
+  const labels = Object.keys(dailyHours);
+
   const chartData = {
-    labels: Object.keys(dailyHours),
+    labels,
     datasets: [
       {
         label: "Hours Worked",
-        data: Object.values(dailyHours),
-        backgroundColor: "rgba(53, 162, 235, 0.5)",
-        borderColor: "rgb(53, 162, 235)",
-        borderWidth: 2,
-        borderRadius: 8,
-        tension: 0.4,
-        fill: true,
+        data: labels.map((date) => dailyHours[date] ?? 0),
+        borderColor: "rgb(75, 192, 192)",
+        tension: 0.1,
+        pointBackgroundColor: "rgb(75, 192, 192)",
+        pointRadius: 6,
+        datalabels: {
+          align: "center",
+          anchor: "center",
+          color: "#fff",
+          font: {
+            weight: "bold",
+            size: 10,
+          },
+          formatter: function (value, context) {
+            const date = context.chart.data.labels?.[context.dataIndex];
+            return sessionCounts[date] ?? "";
+          },
+        },
       },
     ],
   };
@@ -96,6 +115,7 @@ export function UserAnalytics({ user }: { user: any }) {
                   legend: {
                     display: false,
                   },
+                  datalabels: {},
                   tooltip: {
                     backgroundColor: "rgba(255, 255, 255, 0.9)",
                     titleColor: "#1e293b",
@@ -106,7 +126,10 @@ export function UserAnalytics({ user }: { user: any }) {
                     displayColors: false,
                     callbacks: {
                       label: function (context) {
-                        return `${context.parsed.y.toFixed(1)} hours`;
+                        const date = context.label;
+                        const hours = context.formattedValue;
+                        const count = sessionCounts[date] ?? 0;
+                        return `Hours: ${hours}, Sessions: ${count}`;
                       },
                     },
                   },

@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { Line } from "react-chartjs-2";
 import { IoExitOutline } from "react-icons/io5";
 import { IoEnterOutline } from "react-icons/io5";
+import ChartDataLabels from "chartjs-plugin-datalabels";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -23,7 +24,8 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  ChartDataLabels
 );
 
 export function Dashboard({ profile }: { profile: any }) {
@@ -73,37 +75,68 @@ export function Dashboard({ profile }: { profile: any }) {
       (dailyHours[date] || 0) + session.duration / 1000 / 60 / 60;
   });
 
+  // Count sessions per day
+  const sessionCounts: { [date: string]: number } = {};
+  weekWorkSessions?.forEach((session) => {
+    const date = format(session.checkIn, "MM/dd");
+    sessionCounts[date] = (sessionCounts[date] || 0) + 1;
+  });
+
+  const labels = Object.keys(dailyHours);
+
   const chartData = {
-    labels: Object.keys(dailyHours),
+    labels,
     datasets: [
       {
         label: "Hours Worked",
-        data: Object.values(dailyHours),
+        data: labels.map((date) => dailyHours[date] ?? 0),
         borderColor: "rgb(75, 192, 192)",
         tension: 0.1,
+        pointBackgroundColor: "rgb(75, 192, 192)",
+        pointRadius: 6,
+        datalabels: {
+          align: "center",
+          anchor: "center",
+          color: "#fff",
+          font: {
+            weight: "bold",
+            size: 10,
+          },
+          formatter: function (value, context) {
+            const date = context.chart.data.labels?.[context.dataIndex];
+            return sessionCounts[date] ?? "";
+          },
+        },
       },
     ],
   };
-
   const totalHours = Object.values(dailyHours).reduce((a, b) => a + b, 0);
+  let summaryTextColor = "text-red-600"; // under 10 hours
+
+  if (totalHours > 20) {
+    summaryTextColor = "text-green-600";
+  } else if (totalHours > 10) {
+    summaryTextColor = "text-yellow-600";
+  }
+
   const averageHours = totalHours / Object.keys(dailyHours).length || 0;
 
   return (
     <div className="space-y-6">
       <div className="">
-        <h2 className="text-2xl font-bold mb-4">Welcome, {profile.name}</h2>
+        <h2 className="text-2xl font-bold mb-8">Welcome, {profile.name}</h2>
         <div className="flex justify-center space-x-4">
           {!currentSession && (
             <button
               onClick={handleCheckIn}
               disabled={!!currentSession}
               className={
-                "px-6 py-2 rounded-[6px] text-white font-medium bg-green-600 hover:bg-green-700"
+                "w-full px-6 py-5 rounded-[6px] text-white text-xl font-bold bg-green-600 hover:bg-green-700"
               }
             >
               <div className="flex items-center justify-center gap-2">
                 <span>Check In</span>
-                <IoExitOutline className="text-xl" />
+                <IoExitOutline className="text-2xl" />
               </div>
             </button>
           )}
@@ -112,7 +145,7 @@ export function Dashboard({ profile }: { profile: any }) {
               onClick={handleCheckOut}
               disabled={!currentSession}
               className={
-                "px-6 py-2 rounded-[6px]  text-white font-medium bg-rose-600 hover:bg-rose-700"
+                "w-full px-6 py-5 rounded-[6px]  text-white font-bold text-xl bg-rose-600 hover:bg-rose-700"
               }
             >
               <div className="flex items-center justify-center gap-2">
@@ -128,11 +161,15 @@ export function Dashboard({ profile }: { profile: any }) {
         <div className="grid grid-cols-2 gap-4 mb-6">
           <div className="bg-gray-50 p-4 rounded-[6px]">
             <p className="text-sm text-gray-600">Total Hours (7 days)</p>
-            <p className="text-2xl font-bold">{totalHours.toFixed(1)}</p>
+            <p className={`${summaryTextColor} text-2xl font-bold`}>
+              {totalHours.toFixed(1)}
+            </p>
           </div>
           <div className="bg-gray-50 p-4 rounded-[6px]">
             <p className="text-sm text-gray-600">Daily Average</p>
-            <p className="text-2xl font-bold">{averageHours.toFixed(1)}</p>
+            <p className={`${summaryTextColor} text-2xl font-bold`}>
+              {averageHours.toFixed(1)}
+            </p>
           </div>
         </div>
         <div className="h-64">
@@ -141,13 +178,58 @@ export function Dashboard({ profile }: { profile: any }) {
             options={{
               responsive: true,
               maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  display: false,
+                },
+                datalabels: {},
+                tooltip: {
+                  backgroundColor: "rgba(255, 255, 255, 0.9)",
+                  titleColor: "#1e293b",
+                  bodyColor: "#1e293b",
+                  borderColor: "#e2e8f0",
+                  borderWidth: 1,
+                  padding: 12,
+                  displayColors: false,
+                  callbacks: {
+                    label: function (context) {
+                      const date = context.label;
+                      const hours = context.formattedValue;
+                      const count = sessionCounts[date] ?? 0;
+                      return `Hours: ${hours}, Sessions: ${count}`;
+                    },
+                  },
+                },
+              },
               scales: {
                 y: {
                   beginAtZero: true,
                   title: {
                     display: true,
                     text: "Hours",
+                    font: {
+                      weight: "bold",
+                    },
                   },
+                  grid: {
+                    color: "rgba(0, 0, 0, 0.05)",
+                  },
+                },
+                x: {
+                  grid: {
+                    display: false,
+                  },
+                },
+              },
+              elements: {
+                line: {
+                  tension: 0.4,
+                },
+                point: {
+                  radius: 4,
+                  hoverRadius: 6,
+                  backgroundColor: "white",
+                  borderWidth: 2,
                 },
               },
             }}
