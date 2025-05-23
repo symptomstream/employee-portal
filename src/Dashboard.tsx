@@ -91,7 +91,9 @@ export function Dashboard({ profile }: { profile: any }) {
         label: "Hours Worked",
         data: labels.map((date) => dailyHours[date] ?? 0),
         borderColor: "rgb(75, 192, 192)",
-        tension: 0.1,
+        backgroundColor: "rgba(75, 192, 192, 0.15)",
+        fill: true,
+        tension: 0.4, // ✅ Smooth curve
         pointBackgroundColor: "rgb(75, 192, 192)",
         pointRadius: 6,
         datalabels: {
@@ -173,67 +175,76 @@ export function Dashboard({ profile }: { profile: any }) {
           </div>
         </div>
         <div className="h-64">
-          <Line
-            data={chartData}
-            options={{
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: {
-                legend: {
+          options=
+          {{
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: {
+              duration: 800,
+              easing: "easeOutQuart",
+            },
+            plugins: {
+              legend: {
+                display: false,
+              },
+              datalabels: {},
+              tooltip: {
+                backgroundColor: "rgba(255, 255, 255, 0.9)",
+                titleColor: "#1e293b",
+                bodyColor: "#1e293b",
+                borderColor: "#e2e8f0",
+                borderWidth: 1,
+                padding: 12,
+                displayColors: false,
+                callbacks: {
+                  label: function (context) {
+                    const date = context.label;
+                    const hours = context.formattedValue;
+                    const count = sessionCounts[date] ?? 0;
+                    return `Hours: ${hours}, Sessions: ${count}`;
+                  },
+                },
+              },
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                suggestedMax: 8,
+                ticks: {
+                  stepSize: 1,
+                  font: { size: 12 },
+                },
+                title: {
+                  display: true,
+                  text: "Hours",
+                  font: { weight: "bold", size: 14 },
+                },
+                grid: {
+                  color: "rgba(0, 0, 0, 0.05)",
+                },
+              },
+              x: {
+                ticks: {
+                  font: { size: 12 },
+                },
+                grid: {
                   display: false,
                 },
-                datalabels: {},
-                tooltip: {
-                  backgroundColor: "rgba(255, 255, 255, 0.9)",
-                  titleColor: "#1e293b",
-                  bodyColor: "#1e293b",
-                  borderColor: "#e2e8f0",
-                  borderWidth: 1,
-                  padding: 12,
-                  displayColors: false,
-                  callbacks: {
-                    label: function (context) {
-                      const date = context.label;
-                      const hours = context.formattedValue;
-                      const count = sessionCounts[date] ?? 0;
-                      return `Hours: ${hours}, Sessions: ${count}`;
-                    },
-                  },
-                },
               },
-              scales: {
-                y: {
-                  beginAtZero: true,
-                  title: {
-                    display: true,
-                    text: "Hours",
-                    font: {
-                      weight: "bold",
-                    },
-                  },
-                  grid: {
-                    color: "rgba(0, 0, 0, 0.05)",
-                  },
-                },
-                x: {
-                  grid: {
-                    display: false,
-                  },
-                },
+            },
+            elements: {
+              line: {
+                tension: 0.4,
               },
-              elements: {
-                line: {
-                  tension: 0.4,
-                },
-                point: {
-                  radius: 4,
-                  hoverRadius: 6,
-                  backgroundColor: "white",
-                  borderWidth: 2,
-                },
+              point: {
+                radius: 4,
+                hoverRadius: 6,
+                backgroundColor: "white",
+                borderWidth: 2,
+                pointStyle: "circle",
               },
-            }}
-          />
+            },
+          }}
         </div>
       </div>
 

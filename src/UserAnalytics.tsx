@@ -38,9 +38,9 @@ export function UserAnalytics({ user }: { user: any }) {
         label: "Hours Worked",
         data: labels.map((date) => dailyHours[date] ?? 0),
         borderColor: "rgb(75, 192, 192)",
-        tension: 0.1,
         backgroundColor: "rgba(75, 192, 192, 0.15)",
         fill: true,
+        tension: 0.4, // ✅ Smooth curve
         pointBackgroundColor: "rgb(75, 192, 192)",
         pointRadius: 6,
         datalabels: {
