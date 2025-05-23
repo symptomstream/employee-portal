@@ -1,4 +1,5 @@
 import { useQuery, useMutation } from "convex/react";
+import { useEffect, useState } from "react";
 import { api } from "../convex/_generated/api";
 import { format, startOfDay, endOfDay, subDays } from "date-fns";
 import { toast } from "sonner";
@@ -32,6 +33,56 @@ export function Dashboard({ profile }: { profile: any }) {
   const currentSession = useQuery(api.workSessions.getCurrentSession);
   const checkIn = useMutation(api.workSessions.checkIn);
   const checkOut = useMutation(api.workSessions.checkOut);
+
+  const [liveDuration, setLiveDuration] = useState<number | null>(null);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+
+    if (currentSession && currentSession.checkIn && !currentSession.checkOut) {
+      const updateDuration = () => {
+        const now = Date.now();
+        setLiveDuration(now - currentSession.checkIn);
+      };
+
+      updateDuration(); // initial run
+      interval = setInterval(updateDuration, 1000); // update every second
+    } else {
+      setLiveDuration(null);
+    }
+
+    return () => clearInterval(interval);
+  }, [currentSession]);
+
+  const [liveTimeDisplay, setLiveTimeDisplay] = useState("00:00:00");
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+
+    if (currentSession && currentSession.checkIn && !currentSession.checkOut) {
+      const updateTime = () => {
+        const now = Date.now();
+        const elapsed = now - currentSession.checkIn;
+
+        const totalSeconds = Math.floor(elapsed / 1000);
+        const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, "0");
+        const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(
+          2,
+          "0"
+        );
+        const seconds = String(totalSeconds % 60).padStart(2, "0");
+
+        setLiveTimeDisplay(`${hours}:${minutes}:${seconds}`);
+      };
+
+      updateTime();
+      interval = setInterval(updateTime, 1000);
+    } else {
+      setLiveTimeDisplay("00:00:00");
+    }
+
+    return () => clearInterval(interval);
+  }, [currentSession]);
 
   const today = new Date();
   // Get today's sessions
@@ -146,12 +197,11 @@ export function Dashboard({ profile }: { profile: any }) {
             <button
               onClick={handleCheckOut}
               disabled={!currentSession}
-              className={
-                "w-full px-6 py-5 rounded-[6px]  text-white font-bold text-xl bg-rose-600 hover:bg-rose-700"
-              }
+              className="w-full px-6 py-5 rounded-[6px] text-white font-bold text-xl bg-rose-600 hover:bg-rose-700 group"
             >
               <div className="flex items-center justify-center gap-2">
-                <span>Check Out</span>
+                <span className="group-hover:hidden">{liveTimeDisplay}</span>
+                <span className="hidden group-hover:inline">Check Out</span>
                 <IoEnterOutline className="text-xl" />
               </div>
             </button>
@@ -273,10 +323,17 @@ export function Dashboard({ profile }: { profile: any }) {
                   </p>
                 )}
               </div>
-              {session.duration && (
+              {session.checkOut ? (
                 <p className="text-sm font-medium text-gray-900 whitespace-nowrap">
-                  {Math.round(session.duration / 1000 / 60)} min
+                  {`${Math.round(session.duration / 1000 / 60)} min`}
                 </p>
+              ) : session._id === currentSession?._id &&
+                liveDuration !== null ? (
+                <p className="text-sm font-medium text-green-600 whitespace-nowrap">
+                  {`${Math.round(liveDuration / 1000 / 60)} min`}
+                </p>
+              ) : (
+                "--"
               )}
             </div>
           ))
