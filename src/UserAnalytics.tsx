@@ -41,19 +41,26 @@ export function UserAnalytics({ user }: { user: any }) {
       {
         label: "Hours Worked",
         data: labels.map((date) => dailyHours[date] ?? 0),
-        borderColor: "rgb(75, 192, 192)",
-        backgroundColor: "rgba(75, 192, 192, 0.15)",
+        borderColor: "#4f46e5", // indigo-600
+        backgroundColor: "rgba(99, 102, 241, 0.15)", // translucent indigo
         fill: true,
-        tension: 0.4, // ✅ Smooth curve
-        pointBackgroundColor: "rgb(75, 192, 192)",
+        tension: 0.4,
+        borderWidth: 3,
+        pointBackgroundColor: "#c7d2fe", // indigo-200
+        pointBorderColor: "#6366f1", // indigo-500
+        pointBorderWidth: 2,
         pointRadius: 6,
+        pointHoverRadius: 8,
         datalabels: {
-          align: "center",
-          anchor: "center",
-          color: "#fff",
+          align: "top",
+          anchor: "end",
+          color: "#f9fafb", // white/gray-50
+          backgroundColor: "#1e293b", // slate-800
+          borderRadius: 6,
+          padding: 6,
           font: {
             weight: "bold",
-            size: 10,
+            size: 14,
           },
           formatter: function (value, context) {
             const date = context.chart.data.labels?.[context.dataIndex];

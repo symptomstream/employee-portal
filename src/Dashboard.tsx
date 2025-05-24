@@ -141,19 +141,26 @@ export function Dashboard({ profile }: { profile: any }) {
       {
         label: "Hours Worked",
         data: labels.map((date) => dailyHours[date] ?? 0),
-        borderColor: "rgb(75, 192, 192)",
-        backgroundColor: "rgba(75, 192, 192, 0.15)",
+        borderColor: "#4f46e5", // indigo-600
+        backgroundColor: "rgba(99, 102, 241, 0.15)", // translucent indigo
         fill: true,
-        tension: 0.4, // ✅ Smooth curve
-        pointBackgroundColor: "rgb(75, 192, 192)",
+        tension: 0.4,
+        borderWidth: 3,
+        pointBackgroundColor: "#c7d2fe", // indigo-200
+        pointBorderColor: "#6366f1", // indigo-500
+        pointBorderWidth: 2,
         pointRadius: 6,
+        pointHoverRadius: 8,
         datalabels: {
-          align: "center",
-          anchor: "center",
-          color: "#fff",
+          align: "top",
+          anchor: "end",
+          color: "#f9fafb",
+          backgroundColor: "#1e2937",
+          borderRadius: 6,
+          padding: 6,
           font: {
             weight: "bold",
-            size: 10,
+            size: 14,
           },
           formatter: function (value, context) {
             const date = context.chart.data.labels?.[context.dataIndex];
@@ -264,6 +271,7 @@ export function Dashboard({ profile }: { profile: any }) {
                   ticks: {
                     stepSize: 1,
                     font: { size: 12 },
+                    color: "#f1f5f9",
                   },
                   title: {
                     display: true,
@@ -271,12 +279,13 @@ export function Dashboard({ profile }: { profile: any }) {
                     font: { weight: "bold", size: 14 },
                   },
                   grid: {
-                    color: "rgba(0, 0, 0, 0.05)",
+                    color: "rgba(255, 255, 255, 0.2)",
                   },
                 },
                 x: {
                   ticks: {
                     font: { size: 12 },
+                    color: "#f1f5f9",
                   },
                   grid: {
                     display: false,
@@ -286,6 +295,7 @@ export function Dashboard({ profile }: { profile: any }) {
               elements: {
                 line: {
                   tension: 0.4,
+                  borderWidth: 3,
                 },
                 point: {
                   radius: 4,
