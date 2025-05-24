@@ -15,6 +15,7 @@ import { UserManagement } from "./UserManagement";
 import { Analytics } from "./Analytics";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import SidebarLayout from "./SidebarLayout";
+import { Settings } from "./Settings";
 
 import {
   Chart as ChartJS,
@@ -90,6 +91,7 @@ function Content({ profile, activeTab }: { profile: any; activeTab: string }) {
               {activeTab === "Analytics" && profile.role === "staff" && (
                 <Analytics profile={profile} />
               )}
+              {activeTab === "Settings" && <Settings profile={profile} />}
             </div>
           </div>
         )}

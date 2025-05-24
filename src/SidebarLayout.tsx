@@ -18,9 +18,9 @@ export default function SidebarLayout({
 
   const navItems =
     profile && profile.role === "staff"
-      ? ["Dashboard", "Users", "Analytics"]
+      ? ["Dashboard", "Users", "Analytics", "Settings"]
       : profile
-        ? ["Dashboard"]
+        ? ["Dashboard", "Settings"]
         : [];
 
   return (

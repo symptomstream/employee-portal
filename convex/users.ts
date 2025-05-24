@@ -74,6 +74,30 @@ export const getAllUsers = query({
   },
 });
 
+export const updateProfile = mutation({
+  args: {
+    name: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) throw new Error("Not authenticated");
+
+    const profile = await ctx.db
+      .query("profiles")
+      .withIndex("by_user", (q) => q.eq("userId", userId))
+      .unique();
+
+    if (!profile) throw new Error("Profile not found");
+
+    const patchData: Record<string, any> = {};
+    if (args.name) patchData.name = args.name;
+
+    if (Object.keys(patchData).length > 0) {
+      await ctx.db.patch(profile._id, patchData);
+    }
+  },
+});
+
 export const toggleUserStatus = mutation({
   args: {
     profileId: v.id("profiles"),
