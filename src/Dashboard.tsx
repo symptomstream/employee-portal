@@ -175,7 +175,7 @@ export function Dashboard({ profile }: { profile: any }) {
   const averageHours = totalHours / Object.keys(dailyHours).length || 0;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 px-4 sm:px-6 lg:px-8 mx-auto bg-gray-900 text-gray-100 min-h-screen">
       <div className="">
         <h2 className="text-2xl font-bold mb-8">Welcome, {profile.name}</h2>
         <div className="flex justify-center space-x-4">
@@ -211,13 +211,13 @@ export function Dashboard({ profile }: { profile: any }) {
 
       <div className=" p-2">
         <div className="grid grid-cols-2 gap-4 mb-6">
-          <div className="bg-gray-50 p-4 rounded-[6px]">
+          <div className="bg-gray-800 p-4 rounded-[6px]">
             <p className="text-sm text-gray-600">Total Hours (7 days)</p>
             <p className={`${summaryTextColor} text-2xl font-bold`}>
               {totalHours.toFixed(1)}
             </p>
           </div>
-          <div className="bg-gray-50 p-4 rounded-[6px]">
+          <div className="bg-gray-800 p-4 rounded-[6px]">
             <p className="text-sm text-gray-600">Daily Average</p>
             <p className={`${summaryTextColor} text-2xl font-bold`}>
               {averageHours.toFixed(1)}
@@ -309,22 +309,22 @@ export function Dashboard({ profile }: { profile: any }) {
           [...todayWorkSessions].reverse().map((session) => (
             <div
               key={session._id}
-              className="flex justify-between items-center border border-gray-200 rounded-lg px-4 py-3 bg-gray-50"
+              className="flex justify-between items-center border border-gray-700 rounded-lg px-4 py-3 bg-gray-800"
             >
               <div className="space-y-1">
-                <p className="flex items-center text-sm text-gray-700 gap-2">
+                <p className="flex items-center text-sm text-gray-300 gap-2">
                   <IoEnterOutline className="text-green-600" />
                   <span>Check In: {format(session.checkIn, "h:mm a")}</span>
                 </p>
                 {session.checkOut && (
-                  <p className="flex items-center text-sm text-gray-700 gap-2">
+                  <p className="flex items-center text-sm text-gray-300 gap-2">
                     <IoExitOutline className="text-red-600" />
                     <span>Check Out: {format(session.checkOut, "h:mm a")}</span>
                   </p>
                 )}
               </div>
               {session.checkOut ? (
-                <p className="text-sm font-medium text-gray-900 whitespace-nowrap">
+                <p className="text-sm font-medium text-white whitespace-nowrap">
                   {`${Math.round(session.duration / 1000 / 60)} min`}
                 </p>
               ) : session._id === currentSession?._id &&

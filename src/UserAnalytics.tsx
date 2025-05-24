@@ -68,7 +68,7 @@ export function UserAnalytics({ user }: { user: any }) {
   const averageHours = totalHours / Object.keys(dailyHours).length || 0;
 
   return (
-    <div className="bg-ss-light shadow rounded-[6px] p-6">
+    <div className="bg-gray-800/80 shadow rounded-[6px] p-6 border border-gray-600 backdrop-blur-md">
       <div className="flex flex-col gap-4">
         <div className="w-full flex items-center justify-between">
           <h3 className="text-xl font-semibold">{user.name}</h3>
@@ -82,17 +82,17 @@ export function UserAnalytics({ user }: { user: any }) {
         <div className="flex justify-between items-center">
           <div className="flex gap-8">
             <div className="text-right">
-              <p className="text-sm text-gray-600">Total Hours (7 days)</p>
+              <p className="text-sm text-gray-300">Total Hours (7 days)</p>
               <p className="text-xl font-bold">{totalHours.toFixed(1)}</p>
             </div>
             <div className="text-right">
-              <p className="text-sm text-gray-600">Daily Average</p>
+              <p className="text-sm text-gray-300">Daily Average</p>
               <p className="text-xl font-bold">{averageHours.toFixed(1)}</p>
             </div>
           </div>
 
           <button
-            className="ml-4 p-2 hover:bg-gray-100 rounded-full transition-colors"
+            className="ml-4 p-2 hover:bg-gray-700 rounded-full transition-colors"
             onClick={() => setIsExpanded(!isExpanded)}
           >
             <svg
@@ -163,7 +163,7 @@ export function UserAnalytics({ user }: { user: any }) {
                       font: { weight: "bold", size: 14 },
                     },
                     grid: {
-                      color: "rgba(0, 0, 0, 0.05)",
+                      color: "rgba(255, 255, 255, 0.1)",
                     },
                   },
                   x: {
@@ -171,7 +171,7 @@ export function UserAnalytics({ user }: { user: any }) {
                       font: { size: 12 },
                     },
                     grid: {
-                      display: false,
+                      color: "rgba(255, 255, 255, 0.05)",
                     },
                   },
                 },

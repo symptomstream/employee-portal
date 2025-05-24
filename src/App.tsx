@@ -14,6 +14,7 @@ import { useSwipeable } from "react-swipeable";
 import { UserManagement } from "./UserManagement";
 import { Analytics } from "./Analytics";
 import ChartDataLabels from "chartjs-plugin-datalabels";
+import SidebarLayout from "./SidebarLayout";
 
 import {
   Chart as ChartJS,
@@ -37,7 +38,7 @@ ChartJS.register(
   ChartDataLabels
 );
 
-function Content({ profile }: { profile: any }) {
+function Content({ profile, activeTab }: { profile: any; activeTab: string }) {
   if (profile === undefined) {
     return (
       <div className="flex justify-center">
@@ -47,10 +48,10 @@ function Content({ profile }: { profile: any }) {
   }
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-8 bg-gray-900 text-gray-100 min-h-[calc(100vh-64px)]">
       <Unauthenticated>
-        <div className="h-[calc(100vh-64px)] flex items-center justify-center bg-ss-dblue overflow-y-auto">
-          <div className="w-full text-center max-w-2xl mx-auto rounded-2xl shadow-md lg:p-12 p-8 bg-ss-blue">
+        <div className="h-[calc(100vh-64px)] flex items-center justify-center bg-gray-900 overflow-y-auto">
+          <div className="w-full text-center max-w-2xl mx-auto rounded-2xl shadow-md lg:p-12 p-8 bg-gray-800">
             <h1 className="text-4xl font-bold mb-4 text-ss-white">Welcome</h1>
             <p className="text-xl text-gray-300 mb-8">
               Sign in to access your dashboard
@@ -62,29 +63,33 @@ function Content({ profile }: { profile: any }) {
 
       <Authenticated>
         {profile === null ? (
-          <div className="h-[calc(100vh-64px)] flex items-center justify-center bg-ss-dblue overflow-y-auto">
+          <div className="h-[calc(100vh-64px)] flex items-center justify-center bg-gray-900 overflow-y-auto">
             <CreateProfile />
           </div>
         ) : profile === undefined ? (
           <div>Loading...</div>
         ) : !profile.isActive ? (
-          <div className="h-[calc(100vh-64px)] flex items-center justify-center bg-ss-dblue overflow-y-auto">
+          <div className="h-[calc(100vh-64px)] flex items-center justify-center bg-gray-900 overflow-y-auto">
             <div className="text-center">
               <h1 className="text-2xl font-bold mb-4 text-gray-100">
                 Account Pending Approval
               </h1>
-              <p className="text-gray-400">
+              <p className="text-gray-300">
                 Your account is currently inactive. Please wait for a staff
                 member to approve your account.
               </p>
             </div>
           </div>
-        ) : profile.role === "staff" ? (
-          <StaffContent profile={profile} />
         ) : (
           <div className="flex justify-center w-full">
             <div className="w-full max-w-3xl p-4">
-              <Dashboard profile={profile} />
+              {activeTab === "Dashboard" && <Dashboard profile={profile} />}
+              {activeTab === "Users" && profile.role === "staff" && (
+                <UserManagement profile={profile} />
+              )}
+              {activeTab === "Analytics" && profile.role === "staff" && (
+                <Analytics profile={profile} />
+              )}
             </div>
           </div>
         )}
@@ -95,33 +100,21 @@ function Content({ profile }: { profile: any }) {
 
 function App() {
   const profile = useQuery(api.users.getProfile);
+  const [activeTab, setActiveTab] = useState("Dashboard");
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <header className="sticky top-0 z-10 bg-ss-blue p-4 flex justify-between items-center ">
-        <h2 className="text-xl font-semibold text-gray-200">Employee Portal</h2>
-        <div className="flex items-center gap-4">
-          <SignOutButton />
-          <a
-            href="https://symptomstream.ca"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img
-              src="/assets/logo.png"
-              alt="Company Logo"
-              className="h-10 w-auto object-contain filter brightness-0 invert hover:brightness-100 hover:invert-0 transition duration-300"
-            />
-          </a>
-        </div>
-      </header>
+    <SidebarLayout
+      profile={profile}
+      activeTab={activeTab}
+      setActiveTab={setActiveTab}
+    >
       <main>
         <div>
-          <Content profile={profile} />
+          <Content profile={profile} activeTab={activeTab} />
         </div>
       </main>
       <Toaster />
-    </div>
+    </SidebarLayout>
   );
 }
 

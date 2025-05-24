@@ -40,17 +40,16 @@ export function UserManagement({ profile }: { profile: any }) {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-4">Manage Users</h2>
       <div className="space-y-4">
         {users?.map((user) => (
           <div
             key={user._id}
-            className="border rounded-[4px] p-4 flex justify-between items-center bg-ss-light"
+            className="border border-gray-700 rounded-[4px] p-4 flex justify-between items-center bg-gray-800 text-gray-100"
           >
             <div>
               <p className="font-medium">{user.name}</p>
-              <p className="text-sm text-gray-600">Role: {user.role}</p>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-gray-300">Role: {user.role}</p>
+              <p className="text-sm text-gray-300">
                 Status: {user.isActive ? "Active" : "Inactive"}
               </p>
             </div>
