@@ -76,7 +76,7 @@ export default function SidebarLayout({
         <header className="flex items-center justify-between p-4 bg-gray-800 shadow lg:hidden text-white">
           <button
             onClick={() => setSidebarOpen(true)}
-            className="text-white focus:outline-none"
+            className="text-white text-3xl focus:outline-none"
           >
             ☰
           </button>
