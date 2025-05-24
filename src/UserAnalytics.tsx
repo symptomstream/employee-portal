@@ -75,7 +75,10 @@ export function UserAnalytics({ user }: { user: any }) {
   const averageHours = totalHours / Object.keys(dailyHours).length || 0;
 
   return (
-    <div className="bg-gray-800/80 shadow rounded-[6px] p-6 border border-gray-600 backdrop-blur-md">
+    <div
+      className="bg-gray-800/80 shadow rounded-[6px] p-6 border border-gray-600 backdrop-blur-md cursor-pointer transition-colors hover:bg-gray-700/30"
+      onClick={() => setIsExpanded(!isExpanded)}
+    >
       <div className="flex flex-col gap-4">
         <div className="w-full flex items-center justify-between">
           <h3 className="text-xl font-semibold">{user.name}</h3>
@@ -86,7 +89,7 @@ export function UserAnalytics({ user }: { user: any }) {
             </span>
           )}
         </div>
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center px-2 py-1 rounded-md">
           <div className="flex gap-8">
             <div className="text-right">
               <p className="text-sm text-gray-300">Total Hours (7 days)</p>
@@ -98,10 +101,7 @@ export function UserAnalytics({ user }: { user: any }) {
             </div>
           </div>
 
-          <button
-            className="ml-4 p-2 hover:bg-gray-700 rounded-full transition-colors"
-            onClick={() => setIsExpanded(!isExpanded)}
-          >
+          <div className="ml-4 p-2">
             <svg
               className={`w-6 h-6 transform transition-transform ${
                 isExpanded ? "rotate-180" : ""
@@ -117,7 +117,7 @@ export function UserAnalytics({ user }: { user: any }) {
                 d="M19 9l-7 7-7-7"
               />
             </svg>
-          </button>
+          </div>
         </div>
       </div>
 
