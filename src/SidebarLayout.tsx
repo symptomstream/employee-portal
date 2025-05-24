@@ -16,6 +16,8 @@ export default function SidebarLayout({
 
   console.log("User profile:", profile);
 
+  if (!profile) return <>{children}</>;
+
   const navItems =
     profile && profile.role === "staff"
       ? ["Dashboard", "Users", "Analytics", "Settings"]

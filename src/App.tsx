@@ -105,18 +105,20 @@ function App() {
   const [activeTab, setActiveTab] = useState("Dashboard");
 
   return (
-    <SidebarLayout
-      profile={profile}
-      activeTab={activeTab}
-      setActiveTab={setActiveTab}
-    >
-      <main>
-        <div>
-          <Content profile={profile} activeTab={activeTab} />
-        </div>
-      </main>
-      <Toaster />
-    </SidebarLayout>
+    <div className="min-h-[100dvh] bg-gray-900 text-gray-100 flex flex-col">
+      <SidebarLayout
+        profile={profile}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+      >
+        <main>
+          <div>
+            <Content profile={profile} activeTab={activeTab} />
+          </div>
+        </main>
+        <Toaster />
+      </SidebarLayout>
+    </div>
   );
 }
 
