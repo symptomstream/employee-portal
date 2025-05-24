@@ -311,7 +311,7 @@ export function Dashboard({ profile }: { profile: any }) {
       </div>
 
       <div className=" rounded-xl  space-y-4">
-        <h3 className="text-xl font-semibold text-gray-800">
+        <h3 className="text-xl font-semibold text-gray-500">
           Today's Work Sessions
         </h3>
 
