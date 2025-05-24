@@ -162,7 +162,7 @@ export function StaffContent({ profile }: { profile: any }) {
   return (
     <div
       ref={containerRef}
-      className={`h-[calc(100vh-64px)] bg-slate-200 overflow-y-auto ${
+      className={`h-[calc(100dvh-64px)] bg-slate-200 overflow-y-auto ${
         isOverflowing ? "pt-36" : "pt-6"
       } flex flex-col items-center`}
     >
