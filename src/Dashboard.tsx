@@ -257,9 +257,21 @@ export function Dashboard({ profile }: { profile: any }) {
                   callbacks: {
                     label: function (context) {
                       const date = context.label;
-                      const hours = context.formattedValue;
-                      const count = sessionCounts[date] ?? 0;
-                      return `Hours: ${hours}, Sessions: ${count}`;
+                      const sessions =
+                        weekWorkSessions?.filter(
+                          (s) => format(s.checkIn, "MM/dd") === date
+                        ) || [];
+
+                      return sessions.map((s, i) => {
+                        const checkIn = format(s.checkIn, "p"); // formatted time
+                        const checkOut = s.checkOut
+                          ? format(s.checkOut, "p")
+                          : "—";
+                        const duration = s.duration
+                          ? `${Math.round(s.duration / 60000)} min`
+                          : "—";
+                        return `${checkIn} → ${checkOut} | ${duration}`;
+                      });
                     },
                   },
                 },
