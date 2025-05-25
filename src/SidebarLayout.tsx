@@ -44,9 +44,19 @@ export default function SidebarLayout({
         <div className="h-full flex flex-col justify-between">
           {/* Top: Logo + Nav */}
           <div>
-            <div className="p-4 text-2xl font-bold border-b border-gray-600">
-              Employee Portal
-            </div>
+            <a
+              href="https://symptomstream.ca"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-4 flex items-center gap-3 text-2xl font-bold border-b border-gray-600 hover:opacity-80 transition"
+            >
+              <img
+                src="../public/assets/logo.png"
+                alt="Logo"
+                className="h-7 w-7 object-contain filter brightness-0 invert hover:filter-none transition duration-300"
+              />
+              <span>Employee Portal</span>
+            </a>
             <nav className="p-4 space-y-2">
               {navItems.map((item) => (
                 <button
