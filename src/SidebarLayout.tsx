@@ -51,7 +51,7 @@ export default function SidebarLayout({
               className="p-4 flex items-center gap-3 text-2xl font-bold border-b border-gray-600 hover:opacity-80 transition"
             >
               <img
-                src="../public/assets/logo.png"
+                src="/assets/logo.png"
                 alt="Logo"
                 className="h-7 w-7 object-contain filter brightness-0 invert hover:filter-none transition duration-300"
               />
